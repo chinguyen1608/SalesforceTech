@@ -1,0 +1,86 @@
+<apex:page showHeader="true" sidebar="false" controller="searchAccountContactInformationCtrl">
+	<style>
+		.tbl-result {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		
+		.tbl-result th, .tbl-result td {
+			padding: 7px 5px;
+			border: 1px solid black;
+		}
+		
+		.tbl-result th {
+			font-weight: bold;
+		}
+		
+		.tbl-result td a {
+			color: blue;
+		}
+	</style>
+	<apex:form >
+		<apex:pageBlock title="Search Section">
+				<apex:inputText value="{!searchText}"/>
+				<apex:pageBlockButtons location="bottom">
+					<apex:commandButton value="Search" action="{!searchInformation}" reRender="result, counterResult" status="status"/> 
+					<apex:actionStatus id="status">
+						<apex:facet name="start">
+							<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+								&nbsp;
+							</div>
+							<div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+								<div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+									<img src="/img/loading.gif" style="float: left; margin: 8px;" />
+									<!-- <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span> -->
+								</div>
+							</div>
+						</apex:facet>
+					</apex:actionStatus>
+				</apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<apex:pageBlock title="Result Section" id="result">
+			<apex:outputPanel layout="none" rendered="{!searchInfoList.size > 0}">
+				<table class="tbl-result">
+					<tr>
+						<th>Record Name</th>
+						<th>Record Type</th>
+						<th>Click to open</th>
+					</tr>
+					<apex:repeat value="{!searchInfoList}" var="item">
+						<tr>
+							<td>{!item.name}</td>
+							<td>{!item.labelObject}</td>
+							<td>
+								<apex:outputLink value="/{!item.recordId}" target="_blank">View</apex:outputLink>
+							</td>
+						</tr>
+					</apex:repeat>
+				</table>
+			</apex:outputPanel>
+		</apex:pageBlock>
+		
+		<apex:pageBlock title="Counter Section" id="counterResult">
+			<apex:outputPanel layout="none" rendered="{!searchInfoList.size > 0}">
+				<table class="tbl-result">
+					<tr>
+						<th>Record Name</th>
+						<th>Record Type</th>
+						<th>Counter</th>
+						<th>Click to update counter</th>
+					</tr>
+					<apex:repeat value="{!searchInfoList}" var="item">
+						<tr>
+							<td>{!item.name}</td>
+							<td>{!item.labelObject}</td>
+							<td><apex:outputText value="{!item.counter}" id="counter"/></td>
+							<td>
+								<apex:commandLink value="Increment Counter" onclick="return false;"/>
+							</td>
+						</tr>
+					</apex:repeat>
+				</table>
+			</apex:outputPanel>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
